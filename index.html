@@ -110,7 +110,6 @@
         Conversão lógica para compatibilidade de sistemas
     </footer>
 </div>
-
 <script>
     const padraoParaMercosul = {
         '0': 'A', '1': 'B', '2': 'C', '3': 'D', '4': 'E',
@@ -121,6 +120,9 @@
         'A': '0', 'B': '1', 'C': '2', 'D': '3', 'E': '4',
         'F': '5', 'G': '6', 'H': '7', 'I': '8', 'J': '9'
     };
+
+    const regexAntiga = /^[A-Z]{3}[0-9]{4}$/;
+    const regexMercosul = /^[A-Z]{3}[0-9][A-Z][0-9]{2}$/;
 
     function normalizar(valor) {
         return valor.toUpperCase().replace(/[^A-Z0-9]/g, '');
@@ -135,14 +137,18 @@
             return;
         }
 
-        let quinto = placa.charAt(4);
-        if (!padraoParaMercosul[quinto]) {
+        if (regexMercosul.test(placa)) {
+            resultado.innerText = 'A placa já está no formato Mercosul';
+            return;
+        }
+
+        if (!regexAntiga.test(placa)) {
             resultado.innerText = 'Placa inválida';
             return;
         }
 
         let placaConvertida = placa.split('');
-        placaConvertida[4] = padraoParaMercosul[quinto];
+        placaConvertida[4] = padraoParaMercosul[placaConvertida[4]];
         resultado.innerText = placaConvertida.join('');
     }
 
@@ -155,17 +161,22 @@
             return;
         }
 
-        let quinto = placa.charAt(4);
-        if (!mercosulParaPadrao[quinto]) {
+        if (regexAntiga.test(placa)) {
+            resultado.innerText = 'A placa já está no formato antigo';
+            return;
+        }
+
+        if (!regexMercosul.test(placa)) {
             resultado.innerText = 'Placa inválida';
             return;
         }
 
         let placaConvertida = placa.split('');
-        placaConvertida[4] = mercosulParaPadrao[quinto];
+        placaConvertida[4] = mercosulParaPadrao[placaConvertida[4]];
         resultado.innerText = placaConvertida.join('');
     }
 </script>
+
 
 </body>
 </html>
