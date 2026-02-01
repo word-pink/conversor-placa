@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Conversor de Placas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #1d2671, #c33764);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: #ffffff;
+            max-width: 500px;
+            width: 100%;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 15px 30px rgba(0,0,0,.2);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .card {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #c33764;
+        }
+
+        .result {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #1d2671;
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Conversor de Placas</h1>
+
+    <!-- Modelo antigo -> Mercosul -->
+    <div class="card">
+        <h2>Modelo antigo → Mercosul</h2>
+        <input
+            type="text"
+            id="antiga"
+            placeholder="Ex: ABC1234"
+            oninput="converterAntigaParaMercosul()"
+        >
+        <div class="result" id="resultadoAntiga"></div>
+    </div>
+
+    <!-- Mercosul -> Modelo antigo -->
+    <div class="card">
+        <h2>Mercosul → Modelo antigo</h2>
+        <input
+            type="text"
+            id="mercosul"
+            placeholder="Ex: ABC1D23"
+            oninput="converterMercosulParaAntiga()"
+        >
+        <div class="result" id="resultadoMercosul"></div>
+    </div>
+
+    <footer>
+        Conversão lógica para compatibilidade de sistemas
+    </footer>
+</div>
+
+<script>
+    const padraoParaMercosul = {
+        '0': 'A', '1': 'B', '2': 'C', '3': 'D', '4': 'E',
+        '5': 'F', '6': 'G', '7': 'H', '8': 'I', '9': 'J'
+    };
+
+    const mercosulParaPadrao = {
+        'A': '0', 'B': '1', 'C': '2', 'D': '3', 'E': '4',
+        'F': '5', 'G': '6', 'H': '7', 'I': '8', 'J': '9'
+    };
+
+    function normalizar(valor) {
+        return valor.toUpperCase().replace(/[^A-Z0-9]/g, '');
+    }
+
+    function converterAntigaParaMercosul() {
+        let placa = normalizar(document.getElementById('antiga').value);
+        let resultado = document.getElementById('resultadoAntiga');
+
+        if (placa.length !== 7) {
+            resultado.innerText = '';
+            return;
+        }
+
+        let quinto = placa.charAt(4);
+        if (!padraoParaMercosul[quinto]) {
+            resultado.innerText = 'Placa inválida';
+            return;
+        }
+
+        let placaConvertida = placa.split('');
+        placaConvertida[4] = padraoParaMercosul[quinto];
+        resultado.innerText = placaConvertida.join('');
+    }
+
+    function converterMercosulParaAntiga() {
+        let placa = normalizar(document.getElementById('mercosul').value);
+        let resultado = document.getElementById('resultadoMercosul');
+
+        if (placa.length !== 7) {
+            resultado.innerText = '';
+            return;
+        }
+
+        let quinto = placa.charAt(4);
+        if (!mercosulParaPadrao[quinto]) {
+            resultado.innerText = 'Placa inválida';
+            return;
+        }
+
+        let placaConvertida = placa.split('');
+        placaConvertida[4] = mercosulParaPadrao[quinto];
+        resultado.innerText = placaConvertida.join('');
+    }
+</script>
+
+</body>
+</html>
